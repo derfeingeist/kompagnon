@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f6f1">
+    <meta name="description" content="A calmer way to plan meals and share household cooking.">
+    <title>Kompagnon — everyday, together</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/style.css">
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <section id="auth-view" class="auth-card" aria-labelledby="auth-title" hidden>
+        <a class="wordmark" href="/" aria-label="Kompagnon home"><span class="brand-mark">k</span> kompagnon</a>
+        <p class="eyebrow">A little more room in your head</p>
+        <h1 id="auth-title">Make everyday easier.</h1>
+        <p id="auth-intro" class="muted">Keep recipes, meal plans, and the shopping list together with your household.</p>
+        <div id="invite-note" class="notice" hidden></div>
+        <form id="auth-form" class="stack">
+          <label id="name-field" hidden>
+            Your name
+            <input name="display_name" autocomplete="name" maxlength="80">
+          </label>
+          <label id="household-field" hidden>
+            Household name
+            <input name="household" autocomplete="organization" maxlength="100" placeholder="e.g. The Rivera home">
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required maxlength="254">
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" autocomplete="current-password" required minlength="12" maxlength="1024">
+            <span id="password-help" class="field-hint">Use at least 12 characters.</span>
+          </label>
+          <p id="auth-error" class="error-message" role="alert" hidden></p>
+          <button id="auth-submit" class="button button-primary" type="submit">Sign in</button>
+        </form>
+        <button id="auth-switch" class="text-button" type="button">Create a household account</button>
+      </section>
+
+      <section id="app-view" hidden>
+        <header class="topbar">
+          <a class="wordmark" href="/" aria-label="Kompagnon home"><span class="brand-mark">k</span> kompagnon</a>
+          <div class="topbar-actions">
+            <span id="household-name" class="household-label"></span>
+            <button id="invite-button" class="button button-subtle" type="button">Invite household</button>
+            <button id="logout-button" class="icon-button" type="button" aria-label="Sign out">Sign out</button>
+          </div>
+        </header>
+        <section id="invite-panel" class="invite-panel" hidden>
+          <div>
+            <h2>Bring your household in</h2>
+            <p class="muted">This single-use invitation expires in seven days.</p>
+          </div>
+          <output id="invite-link"></output>
+          <button id="copy-invite" class="button button-primary" type="button">Copy invite link</button>
+          <button id="close-invite" class="icon-button" type="button" aria-label="Close invitation">Close</button>
+        </section>
+        <section class="welcome">
+          <p class="eyebrow">A calmer kitchen starts here</p>
+          <h1>Good food, less to remember.</h1>
+          <p class="muted">Keep the recipes, the week, and the shopping list in one place.</p>
+        </section>
+        <p id="app-error" class="error-message" role="alert" hidden></p>
+        <nav class="tabs" aria-label="Cooking workspace">
+          <button class="tab-button is-active" data-page="recipes" type="button">Recipes</button>
+          <button class="tab-button" data-page="plan" type="button">Meal plan</button>
+          <button class="tab-button" data-page="shopping" type="button">Shopping list</button>
+        </nav>
+
+        <section id="page-recipes" class="workspace">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Your household cookbook</p>
+              <h2>Recipes</h2>
+            </div>
+            <button id="new-recipe-button" class="button button-primary" type="button">Add a recipe</button>
+          </div>
+          <form id="recipe-form" class="form-card" hidden>
+            <div class="section-heading compact">
+              <h3 id="recipe-form-title">Add a recipe</h3>
+              <button id="cancel-recipe" class="icon-button" type="button">Cancel</button>
+            </div>
+            <input name="id" type="hidden">
+            <div class="form-grid">
+              <label class="span-2">Recipe name
+                <input name="name" required maxlength="120" placeholder="e.g. Sunday tomato soup">
+              </label>
+              <label>Serves
+                <input name="servings" type="number" min="1" max="100" value="4" required>
+              </label>
+              <label class="span-2">A short note
+                <input name="description" maxlength="1000" placeholder="A family favourite, ready in 30 minutes">
+              </label>
+              <label class="span-2">Ingredients <span class="field-hint">One per line: ingredient | amount | unit</span>
+                <textarea name="ingredients" rows="5" placeholder="Tomatoes | 800 | g&#10;Onion | 1 | whole&#10;Olive oil | 2 | tbsp"></textarea>
+              </label>
+              <label class="span-2">Instructions
+                <textarea name="instructions" rows="5" maxlength="10000" placeholder="Add the steps, one per line."></textarea>
+              </label>
+            </div>
+            <p id="recipe-error" class="error-message" role="alert" hidden></p>
+            <button class="button button-primary" type="submit">Save recipe</button>
+          </form>
+          <div id="recipes-list" class="card-grid"></div>
+        </section>
+
+        <section id="page-plan" class="workspace" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Make the week feel lighter</p>
+              <h2>Meal plan</h2>
+            </div>
+            <div class="week-controls">
+              <button id="week-previous" class="icon-button" type="button" aria-label="Previous week">←</button>
+              <span id="week-label" class="week-label"></span>
+              <button id="week-next" class="icon-button" type="button" aria-label="Next week">→</button>
+            </div>
+          </div>
+          <p class="muted">Add a recipe to a day. Your household sees the same plan.</p>
+          <div id="meal-days" class="day-list"></div>
+        </section>
+
+        <section id="page-shopping" class="workspace" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">One list, shared by everyone</p>
+              <h2>Shopping list</h2>
+            </div>
+            <button id="generate-list" class="button button-primary" type="button">Build from meal plan</button>
+          </div>
+          <div class="list-date-row">
+            <span id="shopping-week-label" class="muted"></span>
+          </div>
+          <form id="shopping-form" class="shopping-add">
+            <label class="sr-only" for="shopping-name">Add an item</label>
+            <input id="shopping-name" name="name" required maxlength="120" placeholder="Add something to the list">
+            <input name="amount" maxlength="40" placeholder="Amount" aria-label="Amount">
+            <input name="unit" maxlength="40" placeholder="Unit" aria-label="Unit">
+            <button class="button button-primary" type="submit">Add</button>
+          </form>
+          <p id="shopping-error" class="error-message" role="alert" hidden></p>
+          <ul id="shopping-items" class="shopping-items"></ul>
+          <p id="shopping-empty" class="empty-state" hidden>No items yet. Build a list from this week's meals or add something above.</p>
+        </section>
+        <footer class="app-footer">Made for the everyday, together.</footer>
+      </section>
+    </main>
+  </body>
+</html>

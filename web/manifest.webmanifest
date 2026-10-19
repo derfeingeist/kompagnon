@@ -1,0 +1,17 @@
+{
+  "name": "Kompagnon — everyday, together",
+  "short_name": "Kompagnon",
+  "description": "A calmer way to plan meals and share household cooking.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f6f1",
+  "theme_color": "#f7f6f1",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
